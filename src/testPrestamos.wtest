@@ -1,0 +1,78 @@
+import Sims.*
+import fixture.*
+
+test "Un sim esta dispuesto a prestarle a otro la valoracion que tiene por el multiplicado por $10" 
+{
+	var unSim = fixture.UnSimBuenazoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	
+	assert.equals(unSim.montoMaximoAPrestarle(otroSim), unSim.valoracion(otroSim)*10)
+}
+
+test "Un sim no puede prestar plata cuando no le alcanza"
+{
+	var unSim = fixture.UnSimBuenazoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	
+	unSim.ganarDinero(10)
+	
+	assert.throwsExceptionWithMessage("No le presta dinero", {unSim.lePresta(1000, otroSim)})
+}
+
+test "Un sim no puede prestar mas plata de la que esta dispuesto a prestarle a otro sim	"
+{
+	var unSim = fixture.UnSimBuenazoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	
+	unSim.nivelFelicidad(10)
+	
+	assert.throwsExceptionWithMessage("No le presta dinero", {unSim.lePresta(1000, otroSim)})
+}
+
+test "Un sim normal le puede prestar plata a otro cuando le alcanza y esta dispuesto a hacerlo"
+{
+	var unSim = fixture.UnSimBuenazoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	
+	unSim.ganarDinero(1000)
+	unSim.nivelFelicidad(100)
+	unSim.lePresta(25, otroSim)
+	
+	assert.equals(25, otroSim.dinero())
+}
+
+test "Un sim interesado le puede prestar plata a otro cuando le alcanza, esta dispuesto a hacerlo y al sim le alcanza para devolverle"
+{
+	var unSimInteresado = fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	var amigo = fixture.UnSimBuenazoNormal()
+	
+	amigo.ganarDinero(1000)
+	otroSim.hacerAmigo(amigo)
+	
+	otroSim.ganarDinero(1000)
+	unSimInteresado.ganarDinero(100)
+	
+	unSimInteresado.lePresta(25, otroSim)
+	
+	assert.equals(1025, otroSim.dinero())
+}
+
+test "Un sim interesado no le presta plata a otro sim cuando a este no le alcanza para devolverle"
+{
+	var unSimInteresado = fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	var amigo = fixture.UnSimBuenazoNormal()
+	
+	amigo.ganarDinero(1000)
+	otroSim.hacerAmigo(amigo)
+	
+	otroSim.ganarDinero(100)
+	unSimInteresado.ganarDinero(100)
+	
+	assert.throwsExceptionWithMessage("No le presta dinero", {unSimInteresado.lePresta(200, otroSim)})
+}
+
+
+
+

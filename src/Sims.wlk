@@ -254,8 +254,8 @@ class Sim
  		return relacion
  	}
  	
- 	 method reiniciarRelacion(rela)
- 	 {
+ 	method reiniciarRelacion(rela)
+ 	{
  	 	if(rela.miembros().contains(self) && !rela.vigente())
  	 	{
  	 		rela.reiniciarRelacion()
@@ -268,14 +268,27 @@ class Sim
  	 	{
  	 		error.throwWithMessage("esta relacion esta vigente")
  	 	}
- 	 }
+ 	}
  	 
- 	method lePrestaPlata(otroSim)
+ 	method lePresta(cantidad,otroSim)
  	{
+ 		if(dinero >= cantidad && self.montoMaximoAPrestarle(otroSim) > cantidad)
+ 		{
+ 			otroSim.ganarDinero(cantidad)
+ 		}
+ 		else
+ 		{
+ 			error.throwWithMessage("No le presta dinero")
+ 		}
  		
  	}
-}
+ 	
+	method montoMaximoAPrestarle(otroSim)
+ 	{
+ 		return self.valoracion(otroSim) * 10
+ 	}
 
+}
 
 class SimInteresado inherits Sim
 {
@@ -296,6 +309,17 @@ class SimInteresado inherits Sim
 		return sim.dinero() >= self.dinero() * 2
 	}
 	
+	override method lePresta(cantidad,otroSim)
+	{
+		if(dinero >= cantidad && self.montoMaximoAPrestarle(otroSim) > cantidad && otroSim.dinero() >= cantidad)
+ 		{
+ 			otroSim.ganarDinero(cantidad)
+ 		}
+ 		else
+ 		{
+ 			error.throwWithMessage("No le presta dinero")
+ 		}
+	}
 
 }
 
