@@ -1,0 +1,85 @@
+import Sims.*
+import Trabajos.*
+import fixture.*
+
+object helper
+{
+	method numeroVarioEn(valorAnterior,valorActual,rango)
+	{
+		return (valorActual == valorAnterior + rango)
+	}
+}
+
+test "Un Sim va a un trabajo copado y gana felicidad y dinero" 
+{
+	var sim 				= fixture.UnSimInteresadoNormal()
+	var trabajoCopado 		= new TrabajoCopado(100,100)
+	var felicidadAnterior 	= sim.nivelFelicidad()
+	var dineroAnterior 		= sim.dinero()
+	sim.AsignarTrabajo(trabajoCopado)
+	
+	sim.trabajar()
+	
+	assert.that
+		(
+			helper.numeroVarioEn(felicidadAnterior,sim.nivelFelicidad(),100)
+			&& helper.numeroVarioEn(dineroAnterior,sim.dinero(),100)
+		)
+}
+
+test "Un sim va a un trabajo aburrido y gana plata, pero pierde felicidad"
+{
+	var sim 				= fixture.UnSimInteresadoNormal()
+	var trabajoAburrido 	= new TrabajoAburrido(100,100)
+	var felicidadAnterior 	= sim.nivelFelicidad()
+	var dineroAnterior 		= sim.dinero()
+	sim.AsignarTrabajo(trabajoAburrido)
+	
+	sim.trabajar()
+	
+	assert.that
+		(
+			helper.numeroVarioEn(felicidadAnterior,sim.nivelFelicidad(),-100)
+			&& helper.numeroVarioEn(dineroAnterior,sim.dinero(),100)
+		)
+}
+
+test "Un sim va a un trabajo mercenario y gana mucha plata"
+{
+	var sim 				= fixture.UnSimInteresadoNormal()
+	var trabajoMercenario 	= new TrabajoMercenario()
+	var dineroAnterior 		= sim.dinero()
+	sim.AsignarTrabajo(trabajoMercenario)
+	
+	sim.trabajar()
+	
+	assert.that
+		(
+			helper.numeroVarioEn(dineroAnterior,sim.dinero(),dineroAnterior * 0.02 + 100)
+		)
+}
+
+test "Un sim buenazo aumenta su felicidad en un 10% si trabaja con sus amigos"
+{
+	var sim 				= fixture.UnSimBuenazoNormal()
+	var trabajoCopado 	= new TrabajoCopado(100,100)
+	var otroSim 				= fixture.UnSimBuenazoNormal()
+	
+	sim.hacerAmigo(otroSim)
+	var felicidadVieja = sim.nivelFelicidad()
+	
+	sim.AsignarTrabajo(trabajoCopado)
+	otroSim.AsignarTrabajo(trabajoCopado)
+	
+	sim.trabajar()
+	otroSim.trabajar()
+	
+	assert.equals(sim.nivelFelicidad() ,felicidadVieja + felicidadVieja*0.1 + 100 )
+}
+
+test "A un sim desempleado se le solicita trabajar y devuelve una excepcion diciendo que no tiene empleo"
+{
+	var sim 	= fixture.UnSimInteresadoNormal()
+	
+	assert.throwsExceptionWithMessage("Estoy desempleado", { => sim.trabajar()} )
+}

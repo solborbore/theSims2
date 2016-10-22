@@ -1,0 +1,47 @@
+import Sims.*
+import fixture.*
+ 
+test "Contarle una información a un Sim." 
+{
+	var sim = fixture.UnSimNormal()
+	
+	sim.agregarConocimiento("conocimiento")
+	
+	assert.notEquals(#{},sim.conocimientos())
+}
+
+test "Saber el nivel de conocimientos de un Sim." 
+{
+	var sim = fixture.UnSimNormal()
+	
+	sim.agregarConocimiento("conocimiento")
+	sim.agregarConocimiento("conocimientodos")
+	
+	assert.equals(27,sim.nivelDeConocimientos())
+}
+
+test "Saber si un Sim tiene un conocimiento dado.(sabiendolo)"
+{
+	var sim = fixture.UnSimNormal()
+	
+	sim.agregarConocimiento("conocimiento")
+	
+	assert.that(sim.conocimientos().any({conocimiento => conocimiento == "conocimiento"}))
+}
+
+test "Saber si un Sim tiene un conocimiento dado.(sin saberlo)"
+{
+	var sim = fixture.UnSimNormal()
+	
+	assert.that(!(sim.conocimientos().any({conocimiento => conocimiento == "conocimiento"})))
+}	
+
+test "Saber si los conocimientos de un Sim se borran"
+{
+	var sim = fixture.UnSimNormal()
+	
+	sim.agregarConocimiento("conocimiento")
+	sim.amnesia()
+	
+	assert.equals(#{},sim.conocimientos())
+}

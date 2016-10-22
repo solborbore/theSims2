@@ -1,0 +1,46 @@
+import Sims.*
+import EstadoDeAnimo.*
+import fixture.*
+
+test "Hacer que un sim tenga un estado de animo" 
+{
+	var sim = fixture.UnSimInteresadoNormal()
+	
+	sim.cambiarAnimo(soniador)
+	
+	assert.equals(soniador, sim.estadoDeAnimo())
+}
+
+test "Cambiar el estado de un sim de soniador a incomodo " 
+{
+	var sim = fixture.UnSimBuenazoNormal()
+	
+	sim.cambiarAnimo(soniador)
+	sim.cambiarAnimo(incomodo)
+	
+	assert.equals(incomodo, sim.estadoDeAnimo())
+}
+
+
+
+test "Hacer que al sim se le vaya su estado de animo y no varie su felicidad" 
+{
+	var sim = fixture.UnSimInteresadoNormal()
+	
+	sim.agregarConocimiento("leer")
+	sim.cambiarAnimo(soniador)
+	sim.eliminarAnimo(soniador)
+	
+	assert.equals(100, sim.nivelFelicidad())
+}
+
+test "Hacer que al sim se le vaya su estado de animo y mantiene sus conocimientos" 
+{
+	var sim = fixture.UnSimInteresadoNormal()
+	
+	sim.agregarConocimiento("leer")
+	sim.cambiarAnimo(soniador)
+	sim.eliminarAnimo(soniador)
+	
+	assert.that(sim.conocimientos().contains("leer"))
+}

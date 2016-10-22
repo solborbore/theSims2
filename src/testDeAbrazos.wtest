@@ -1,0 +1,55 @@
+import Sims.*
+import Abrazos.*
+import EstadoDeAnimo.*
+import fixture.*
+
+
+test "El abrazo comun aumenta la felicidad del dador en 2" 
+{
+	var dador 					= fixture.UnSimInteresadoNormal()
+	var receptor 				= fixture.UnSimInteresadoNormal()
+	var unAbrazoComun 			= fixture.unAbrazoComun()	
+	
+	dador.abrazar(receptor, unAbrazoComun)
+	
+	assert.equals(102,dador.nivelFelicidad())
+}
+
+test "El abrazo comun aumenta la felicidad del receptor en 4" 
+{
+	var dador 					= fixture.UnSimInteresadoNormal()
+	var receptor 				= fixture.UnSimInteresadoNormal()
+	var unAbrazoComun 			= fixture.unAbrazoComun()	
+	
+	dador.abrazar(receptor, unAbrazoComun)
+	
+	assert.equals(104,receptor.nivelFelicidad())
+}
+
+test "El abrazo prolongado de alguien que le atrae pone soñador al sim abrazado" 
+{
+	var dador 					= fixture.UnSimBuenazoNormal()
+	var receptor 				= fixture.UnSimBuenazoFemenino()
+	var unAbrazoProlongado 		= fixture.unAbrazoProlongado()
+	
+	dador.abrazar(receptor, unAbrazoProlongado)
+	
+	assert.equals(soniador, receptor.estadoDeAnimo())
+}
+
+test "El abrazo prolongado de alguien que no le atrae pone incomodo al sim abrazado" 
+{
+	var dador 					= fixture.UnSimBuenazoNormal()
+	var receptor 				= fixture.UnSimBuenazoNormal()
+	var unAbrazoProlongado 		= fixture.unAbrazoProlongado()
+	
+	dador.abrazar(receptor, unAbrazoProlongado)
+	
+	assert.equals(incomodo, receptor.estadoDeAnimo())
+}
+
+
+
+
+
+

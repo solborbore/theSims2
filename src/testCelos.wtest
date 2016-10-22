@@ -1,0 +1,96 @@
+import Sims.*
+import Celos.*
+import fixture.*
+
+
+object helper
+{
+	method esAmigoDe(sim, amigo)
+	{
+		return sim.amigos().contains(amigo)
+	}
+}
+
+
+test "Un sim se pone celoso y su felicidad disminuye en 10"
+{
+	var sim = fixture.UnSimNormal()
+	var celos = new CelosPorPlata()
+	
+	sim.ataqueDeCelos(celos)
+	
+	assert.equals(90, sim.nivelFelicidad())
+}
+
+test "un sim se pone celoso por plata y ya no es mas amigo de aquellos que tienen mas dinero que el"
+{
+	var sim 				= fixture.UnSimNormal()
+	var otroSim 			= fixture.UnSimNormal()
+	var otroSimConMasPlata 	= fixture.UnSimNormal()
+	
+	
+	sim.hacerAmigo(otroSim)
+	sim.hacerAmigo(otroSimConMasPlata)
+	
+	sim.ganarDinero(100)
+	otroSim.ganarDinero(50)
+	otroSimConMasPlata.ganarDinero(200)
+	
+	sim.ataqueDeCelos(new CelosPorPlata())
+	
+	assert.that(
+				helper.esAmigoDe(sim, otroSim)
+				&& !helper.esAmigoDe(sim, otroSimConMasPlata)
+				)
+}
+
+test "Un sim se pone celoso por popularidad y deja de ser amigo de los mas populares que el"
+{
+ 	var sim     = fixture.UnSimNormal()
+ 	var otroSim    = fixture.UnSimNormal()
+ 	var otroSimMasPopular  = fixture.UnSimNormal()
+ 
+  	var amigo1     = fixture.UnSimTriste()
+  	var amigo2        = fixture.UnSimFeliz()
+    
+    sim.hacerAmigo(otroSim)
+	sim.hacerAmigo(otroSimMasPopular)
+   	otroSim.hacerAmigo(amigo1)
+   	otroSim.hacerAmigo(amigo1)
+   	otroSimMasPopular.hacerAmigo(amigo2)
+   	otroSimMasPopular.hacerAmigo(amigo2)
+
+ 
+ 	sim.ataqueDeCelos(new CelosPorPopularidad())
+ 
+ 	assert.that
+ 	(
+    	helper.esAmigoDe(sim, otroSim)
+    	&& !helper.esAmigoDe(sim, otroSimMasPopular)
+    )
+}
+
+
+test "un sim se pone celoso de su pareja y deja de ser amigo de los amigos de su pareja"
+{
+	var sim 					= fixture.UnSimNormal()
+	var pareja 					= fixture.UnSimNormal()
+	var amigoDeSim 				= fixture.UnSimNormal()
+	var amigoDePareja 			= fixture.UnSimNormal()
+	sim.hacerAmigo(amigoDeSim)
+	pareja.hacerAmigo(amigoDePareja)
+	sim.hacerAmigo(amigoDePareja)
+	sim.iniciarRelacion(pareja)
+	
+	sim.ataqueDeCelos(new CelosPorPareja())
+	
+	assert.that(
+				sim.amigos().contains(amigoDeSim)
+				)
+				
+}
+test "un sim se pone celoso de su pareja.. pero no tiene pareja"
+{
+	var sim 					= fixture.UnSimNormal()
+	assert.throwsExceptionWithMessage("No tengo pareja", { => sim.ataqueDeCelos(new CelosPorPareja())})			
+}

@@ -1,0 +1,162 @@
+import Sims.*
+import EstadoDeAnimo.*
+import fixture.*
+
+object helper{
+	
+	method hizoUnAmigoYLaFelicidadAumento(sim, otroSim)
+	{
+		var felicidadSim 		    = sim.nivelFelicidad()
+		var valoracionSim			= otroSim.valoracion(sim)
+		
+		sim.hacerAmigo(otroSim)
+		
+		return (sim.nivelFelicidad() == felicidadSim + valoracionSim)
+	}
+	
+	method hizoUnAmigoYFormaParteDeSuListaDeAmigos(sim, otroSim)
+	{
+		sim.hacerAmigo(otroSim)
+		return (sim.amigos().any({amigo => amigo == otroSim}) )
+	}
+}
+
+test "Un sim se hace amigo de otro y aumenta su felicidad respecto a la valoracion del otro" 
+{
+	var sim 					= fixture.UnSimInteresadoNormal()
+	var nuevoAmigo 				= fixture.UnSimInteresadoNormal()
+	
+	assert.that(helper.hizoUnAmigoYLaFelicidadAumento(sim, nuevoAmigo))
+}
+
+test "Un sim se hace amigo de otro y pasa a formar parte de su lista de amigos" 
+{
+	var sim 					= fixture.UnSimInteresadoNormal()
+	var nuevoAmigo 				= fixture.UnSimInteresadoNormal()
+	
+	assert.that(helper.hizoUnAmigoYFormaParteDeSuListaDeAmigos(sim, nuevoAmigo))
+}
+
+test "Un sim se se acuerda del orden en que se hizo amigos ." 
+{
+	var sim 					= fixture.UnSimInteresadoNormal()
+	var nuevoAmigo 				= fixture.UnSimInteresadoNormal()
+	var nuevoAmigo2				= fixture.UnSimInteresadoNormal()
+	
+	
+	sim.hacerAmigo(nuevoAmigo)
+	sim.hacerAmigo(nuevoAmigo2)
+	
+	assert.that(sim.amigos() == [nuevoAmigo,nuevoAmigo2])
+}
+
+test "Dos sims se hacen amigos mutuamente y la felicidad de ambos aumenta" 
+{
+	var sim 	= fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimInteresadoNormal()
+
+	assert.that(helper.hizoUnAmigoYLaFelicidadAumento(sim,otroSim) 
+				&& helper.hizoUnAmigoYLaFelicidadAumento(otroSim, sim))			
+}
+
+test "Dos sims se hacen amigos mutuamente y ambos estan en la lista de amigos del otro" 
+{
+	var sim 	= fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimInteresadoNormal()
+
+	assert.that(helper.hizoUnAmigoYFormaParteDeSuListaDeAmigos(sim,otroSim) 
+				&& helper.hizoUnAmigoYFormaParteDeSuListaDeAmigos(otroSim, sim))			
+}
+
+test "Saber si un sim es amigo de otro (siendolo) ." 
+{
+ 	var sim        = fixture.UnSimInteresadoNormal()
+ 	var amigo      = fixture.UnSimInteresadoNormal()
+ 
+ 	assert.that(helper.hizoUnAmigoYFormaParteDeSuListaDeAmigos(sim, amigo))
+}
+
+test "Saber si un sim es amigo de otro (sin serlo) ." 
+{
+ 	var sim        = fixture.UnSimInteresadoNormal()
+ 	var amigo      = fixture.UnSimInteresadoNormal()
+ 
+ 
+	assert.that(!(sim.amigos().any({amigoa => amigoa == amigo})))
+}
+
+test " Saber los 4 amigos más nuevos de un sim ."
+{
+	var sim         = fixture.UnSimInteresadoNormal()
+ 	var amigo1      = fixture.UnSimInteresadoNormal()
+ 	var amigo2      = fixture.UnSimInteresadoNormal()
+ 	var amigo3      = fixture.UnSimInteresadoNormal()
+ 	var amigo4      = fixture.UnSimInteresadoNormal()
+ 	var amigo5      = fixture.UnSimInteresadoNormal()
+ 	var amigo6      = fixture.UnSimInteresadoNormal()
+ 	
+ 	sim.hacerAmigo(amigo1)
+ 	sim.hacerAmigo(amigo2)
+ 	sim.hacerAmigo(amigo3)
+ 	sim.hacerAmigo(amigo4)
+ 	sim.hacerAmigo(amigo5)
+ 	sim.hacerAmigo(amigo6)
+ 	
+	assert.equals([amigo6,amigo5,amigo4,amigo3],sim.amigosNuevos())
+} 
+
+test " Saber los 4 amigos más viejos de un sim ."
+{
+	var sim      	= fixture.UnSimInteresadoNormal()
+ 	var amigo1      = fixture.UnSimInteresadoNormal()
+ 	var amigo2      = fixture.UnSimInteresadoNormal()
+ 	var amigo3      = fixture.UnSimInteresadoNormal()
+ 	var amigo4      = fixture.UnSimInteresadoNormal()
+ 	var amigo5      = fixture.UnSimInteresadoNormal()
+ 	var amigo6      = fixture.UnSimInteresadoNormal()
+ 	
+ 	sim.hacerAmigo(amigo1)
+ 	sim.hacerAmigo(amigo2)
+ 	sim.hacerAmigo(amigo3)
+ 	sim.hacerAmigo(amigo4)
+ 	sim.hacerAmigo(amigo5)
+ 	sim.hacerAmigo(amigo6)
+ 	
+	assert.equals([amigo1,amigo2,amigo3,amigo4],sim.amigosViejos())
+}
+  
+test "La popularidad de un sim es igual a la suma de las felicidades de sus amigos" {
+	
+	var sim        = fixture.UnSimInteresadoNormal()
+ 	var amigo      = fixture.UnSimInteresadoNormal()
+	var amigo2 	   = fixture.UnSimInteresadoNormal()
+	
+	amigo.nivelFelicidad(90)
+	amigo2.nivelFelicidad(110)
+	
+	sim.hacerAmigo(amigo)
+	sim.hacerAmigo(amigo2)
+	
+	assert.equals(200, sim.popularidad())
+} 
+ 
+test "Saber si un sim es el más popular de su círculo de amigos" 
+{
+	var sim        = fixture.UnSimInteresadoNormal()
+	var amigo1	   = fixture.UnSimPeleadoNormal()
+	var amigo2      = fixture.UnSimBuenazoNormal()
+ 	var amigo11      = fixture.UnSimPeleadoNormal()
+ 	var amigo12      = fixture.UnSimInteresadoNormal()
+ 	var amigo21      = fixture.UnSimBuenazoNormal()
+ 		
+ 	sim.hacerAmigo(amigo1)
+ 	sim.hacerAmigo(amigo2)
+ 	amigo1.hacerAmigo(amigo11)
+ 	amigo1.hacerAmigo(amigo12)
+ 	amigo2.hacerAmigo(amigo11)
+ 	amigo2.hacerAmigo(amigo21)
+ 	
+ 	var otrosim = 	sim.simMasPopular()
+ 	
+ 	assert.that(sim.popularidad() > otrosim.popularidad())
+}

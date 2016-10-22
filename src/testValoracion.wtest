@@ -1,0 +1,108 @@
+import Sims.*
+import fixture.*
+
+
+test "Un sim interesado valora en 30 a un sim cuyos amigos tienen en total $300 " 
+{
+ 	var valorador 	= fixture.UnSimInteresadoNormal()
+ 	var valorado 	= fixture.UnSimInteresadoNormal()
+ 	var amigo1 		= fixture.UnSimInteresadoNormal()
+ 	var amigo2 		= fixture.UnSimInteresadoNormal()
+ 
+ 	amigo1.ganarDinero(100)
+ 	amigo2.ganarDinero(200)
+ 
+ 	valorado.hacerAmigo(amigo1)
+ 	valorado.hacerAmigo(amigo2)
+ 
+ 	assert.equals(30,valorador.valoracion(valorado))
+}
+
+test "Un sim superficial valora en 500 a un sim cuya popularidad es de 25 " 
+{
+ 	var valorador 	= fixture.UnSimSuperficialNormal()
+ 	var valorado 	= fixture.UnSimPeleadoNormal()
+ 	var amigo1 		= fixture.UnSimInteresadoNormal()
+ 	var amigo2 		= fixture.UnSimBuenazoNormal()
+ 
+ 	amigo1.nivelFelicidad(10)
+ 	amigo2.nivelFelicidad(15)
+ 
+ 	valorado.hacerAmigo(amigo1)
+ 	valorado.hacerAmigo(amigo2)
+ 
+ 	assert.equals(500,valorador.valoracion(valorado))
+}
+
+test "Un sim buenazo valora a otro sim en la mitad de su propio nivel de felicidad" 
+{
+ 	var ernesto = fixture.UnSimBuenazoNormal()
+ 	var maria 	= fixture.UnSimInteresadoNormal()
+ 
+ 	ernesto.nivelFelicidad(1000)
+ 
+ 	assert.equals(500, ernesto.valoracion(maria)) 
+}
+
+test "Un sim peleado con su vida valora en 0 a otro sim" 
+{
+ 	var valorador 	= fixture.UnSimPeleadoNormal()
+ 	var valorado 	= fixture.UnSimInteresadoNormal()
+ 
+ 	assert.equals(0,valorador.valoracion(valorado))
+}
+
+test "El Amigo mas valorado de un sim interesado es el mas rico"
+{
+	var simInteresado = fixture.UnSimInteresadoNormal()
+	var simPobre = fixture.UnSimBuenazoNormal()
+	var simRico = fixture.UnSimInteresadoNormal()
+	
+	var amigo1 = fixture.UnSimRico()
+	var amigo2 = fixture.UnSimPobre()
+	
+	
+	simInteresado.hacerAmigo(simRico)
+	simInteresado.hacerAmigo(simPobre)
+	
+	simRico.hacerAmigo(amigo2)
+	simRico.hacerAmigo(amigo1)
+	
+	simPobre.hacerAmigo(amigo2)
+	
+	
+	assert.equals(simRico,simInteresado.simMasValorado())
+}
+
+ test "El amigo mas valorado de un sim superficial es el mas popular"
+{
+	var simSuperficial 		= fixture.UnSimSuperficialNormal()
+	var otroSim 			= fixture.UnSimBuenazoNormal()
+	var otroSimMasPopular 	= fixture.UnSimBuenazoNormal()
+ 
+ 	var amigo1  			= fixture.UnSimTriste()
+ 	var amigo2      		= fixture.UnSimFeliz()
+   	
+   	simSuperficial.hacerAmigo(otroSim)
+	simSuperficial.hacerAmigo(otroSimMasPopular)
+	
+  	otroSim.hacerAmigo(amigo1)
+  	  	
+  	otroSimMasPopular.hacerAmigo(amigo1)
+  	otroSimMasPopular.hacerAmigo(amigo2)
+  	 
+ 
+	assert.equals(otroSimMasPopular, simSuperficial.simMasValorado())
+}
+
+test "Un sim buenazo no valora a alguien mas que al resto"
+{
+	var simBuenazo = fixture.UnSimBuenazoNormal()
+	assert.equals(null, simBuenazo.simMasValorado())
+}
+
+test "Un sim peleado Con La Vida no valora a alguien mas que al resto"
+{
+	var simPeleado = fixture.UnSimPeleadoNormal()
+	assert.equals(null, simPeleado.simMasValorado())
+}

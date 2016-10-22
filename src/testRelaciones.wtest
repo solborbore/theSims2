@@ -1,0 +1,208 @@
+import Sims.*
+import fixture.*
+
+object helper
+{
+	method iniciarRelacion(unSim, otroSim)
+	{
+		unSim.iniciarRelacion(otroSim)
+		return unSim.relacion()
+	}
+}
+
+test "Dos sims inician una relacion, y se crea una relacion con ellos como miembros"
+{
+	var unSimMasculino 	= fixture.UnSimNormal()
+	var unSimFemenino 	= fixture.UnSimNormalFemenino()
+	
+	unSimMasculino.iniciarRelacion(unSimFemenino)
+	
+	assert.equals(unSimMasculino.relacion().miembros(), [unSimMasculino,unSimFemenino])
+}
+
+
+test "Dos sims inician una relacion y se crea un circulo de amigos con los amigos de ambos"
+{
+	var unSimMasculino 	= fixture.UnSimNormal()
+	var unSimFemenino 	= fixture.UnSimNormalFemenino()
+	var unAmigo = fixture.UnSimNormal()
+	var otroAmigo = fixture.UnSimNormalFemenino()
+	
+	unSimMasculino.hacerAmigo(unAmigo)
+	unSimFemenino.hacerAmigo(otroAmigo)
+	
+	var relacion 		= helper.iniciarRelacion(unSimMasculino,unSimFemenino)
+	
+	assert.equals(#{otroAmigo, unAmigo},relacion.circuloDeAmigos())
+}
+
+test "Dos sims inician una relacion, se atraen y por ende funciona"
+{
+	var unSimMasculino 	= fixture.UnSimNormal()
+	var unSimFemenino 	= fixture.UnSimNormalFemenino()
+		
+	var relacion 		= helper.iniciarRelacion(unSimMasculino,unSimFemenino)
+	
+	assert.that(relacion.laRelacionFunciona())
+}
+
+test "Dos sims inician una relacion, no se atraen y por ende no funciona"
+{
+	var unSimMasculino 		= fixture.UnSimNormal()
+	var otroSimMasculino 	= fixture.UnSimNormal()
+		
+	var relacion 		= helper.iniciarRelacion(unSimMasculino,otroSimMasculino)
+	
+	assert.that(!relacion.laRelacionFunciona())
+}
+
+test "Saber Si Un Sim Forma Parte De Una Relacion"
+{
+	var simHombre = fixture.UnSimNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	
+	simHombre.iniciarRelacion(simMujer)
+	
+	assert.notEquals(null, simHombre.relacion())
+}
+
+test "Saber si una relacion termino"
+{
+	var simHombre = fixture.UnSimNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	
+	simHombre.iniciarRelacion(simMujer)
+	simHombre.terminarRelacion()
+	
+	assert.equals(null, simHombre.relacion())
+}
+
+test "El segundo sim pertenece a la pareja del primero"
+{
+	var simHombre = fixture.UnSimNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	
+	simHombre.iniciarRelacion(simMujer)
+	
+	assert.equals([simHombre,simMujer], simHombre.relacion().miembros())
+}
+
+
+test "Si solamente la relacion no funciona, no se pudre todo"
+{
+	var simHombre = fixture.UnSimNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	
+	simHombre.iniciarRelacion(simMujer)
+	
+	!simHombre.relacion().laRelacionFunciona()
+	
+	assert.that(!simHombre.relacion().sePudreTodo())
+} 
+
+test "Se pudre todo cuando uno de los miembros es interesado y le atrae un amigo de la relacion "
+{
+	var otraMujer = fixture.UnSimBuenazoFemenino()
+	var simMujer = fixture.UnSimNormalFemenino()
+	var tercero = fixture.UnSimNormal()
+	
+	simMujer.ganarDinero(100)
+	tercero.ganarDinero(200)
+	simMujer.hacerAmigo(tercero)
+		
+	otraMujer.iniciarRelacion(simMujer)
+	
+	otraMujer.relacion().laRelacionFunciona()
+	
+	assert.that(otraMujer.relacion().sePudreTodo())
+} 
+
+test "Se pudre todo cuando uno de los miembros es superficial y le atrae un amigo de la relacion "
+{
+	var simHombre = fixture.UnSimSuperficialNormal()
+	var otroHombre = fixture.UnSimBuenazoNormal()
+	var tercero = fixture.UnSimNormalFemenino()
+	
+	var amigo1 = fixture.UnSimTriste()
+	var amigo2 = fixture.UnSimTriste()
+	var amigoTercero = fixture.UnSimFeliz()
+	
+	simHombre.hacerAmigo(amigo1)
+	amigo1.hacerAmigo(amigo2)
+	tercero.hacerAmigo(amigoTercero)
+	
+	otroHombre.hacerAmigo(tercero)
+		
+	simHombre.iniciarRelacion(otroHombre)
+	
+	assert.that(simHombre.relacion().sePudreTodo())
+}
+
+test "Se pudre todo cuando uno de los miembros es buenazo y le atrae un amigo de la relacion "
+{
+	var simHombre = fixture.UnSimBuenazoNormal()
+	var otroHombre = fixture.UnSimBuenazoNormal()
+	var tercero = fixture.UnSimBuenazoFemenino()
+	
+	simHombre.hacerAmigo(tercero)
+	
+	simHombre.iniciarRelacion(otroHombre)
+	
+	assert.that(simHombre.relacion().sePudreTodo())
+}
+
+test "Se pudre todo cuando uno de los miembros esta peleado con la vida y le atrae un amigo de la relacion "
+{
+	var simHombre = fixture.UnSimPeleadoNormal()
+	var otroHombre = fixture.UnSimBuenazoNormal()
+	var tercero = fixture.UnSimTristeFemenino()
+	
+	simHombre.hacerAmigo(tercero)
+	
+	simHombre.iniciarRelacion(otroHombre)
+	
+	assert.that(simHombre.relacion().sePudreTodo())
+}
+
+test "Se reinicia una relacion, se pierde la relacion nueva con el amante y se vuelve a la anterior "
+{
+	var simHombre = fixture.UnSimBuenazoNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	var otroHombre = fixture.UnSimPeleadoNormal()
+	
+	simMujer.iniciarRelacion(simHombre)
+	var rela = simMujer.relacion()
+	simMujer.terminarRelacion()
+	simMujer.iniciarRelacion(otroHombre)
+	simMujer.reiniciarRelacion(rela)
+	
+	assert.that(simMujer.relacion().miembros() == [simMujer, simHombre] && otroHombre.relacion() == null)
+}
+
+test "Se intenta reiniciar una relacion de la que el sim no forma parte, y da error"
+{
+	var simHombre = fixture.UnSimBuenazoNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	var otroHombre = fixture.UnSimPeleadoNormal()
+	
+	simMujer.iniciarRelacion(simHombre)
+	var rela = simMujer.relacion()
+	simMujer.terminarRelacion()
+	simMujer.iniciarRelacion(otroHombre)
+	
+	var relacion = fixture.unaRelacion()
+	
+	assert.throwsExceptionWithMessage("esta relacion no pertenece a este sim", { => simMujer.reiniciarRelacion(relacion)})
+}
+
+test "Se intenta reiniciar una relacion que esta vigente"
+{
+	var simHombre = fixture.UnSimBuenazoNormal()
+	var simMujer = fixture.UnSimNormalFemenino()
+	var otroHombre = fixture.UnSimPeleadoNormal()
+	
+	simMujer.iniciarRelacion(simHombre)
+	var rela = simMujer.relacion()
+	
+	assert.throwsExceptionWithMessage("esta relacion esta vigente", { => simMujer.reiniciarRelacion(rela)})
+}

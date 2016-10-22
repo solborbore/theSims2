@@ -1,0 +1,89 @@
+import Sims.*
+import fixture.*
+
+test "Un sim se siente atraido por otro que sea del sexo de su preferencia" 
+{
+	var sim = fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimBuenazoFemenino()
+	
+	assert.that(sim.leAtrae(otroSim))
+}
+
+test "Un sim no se siente atraido por otro que no sea del sexo de su preferencia" 
+{
+	var sim = fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimBuenazoNormal()
+	
+	assert.that(!sim.leAtrae(otroSim))
+}
+
+test "Un sim interesado se siente atraido por otro que duplica su forturna" 
+{
+	var simInteresado = fixture.UnSimInteresadoNormal()
+	var otroSim = fixture.UnSimBuenazoFemenino()
+	
+	simInteresado.ganarDinero(1000)
+	otroSim.ganarDinero(23456789)
+	
+	assert.that(simInteresado.leAtrae(otroSim))
+}
+
+test "Un sim superficial se siente atraido por otro que es muy popular y joven" 
+{
+	var simSuperficial = fixture.UnSimSuperficialNormal()
+	var otroSim = fixture.UnSimBuenazoFemenino()
+	
+	var amigo1 = fixture.UnSimTriste()
+	var amigo2 = fixture.UnSimTriste()
+	var amigo3 = fixture.UnSimFeliz()
+	
+	amigo2.hacerAmigo(amigo1)
+	simSuperficial.hacerAmigo(amigo2)
+		
+	otroSim.hacerAmigo(amigo3)
+	
+	assert.that(simSuperficial.leAtrae(otroSim))
+}
+
+test "Un sim buenazo se siente atraido por otro cualquiera" 
+{
+	var simBuenazo = fixture.UnSimBuenazoFemenino()
+	var otroSim = fixture.UnSimNormal()
+	
+	assert.that(simBuenazo.leAtrae(otroSim))
+}
+
+test "Un sim peleado con la vida se siente atraido por otro cuya felicidad esta por debajo de 200" 
+{
+	var simPeleado = fixture.UnSimBuenazoNormal()
+	var otroSim = fixture.UnSimTristeFemenino()
+	
+	assert.that(simPeleado.leAtrae(otroSim))
+}
+
+test "A un sim peleado con la vida le atraen todos los sim de un conjunto de sim cuya felicidad es inferior a 200" 
+{
+	var simPeleado = fixture.UnSimBuenazoNormal()
+	var simTriste = fixture.UnSimTristeFemenino()
+	var otroSimTriste = fixture.UnSimTristeFemenino()
+	var sims = [simTriste,	otroSimTriste]
+	
+	assert.equals([simTriste,	otroSimTriste], simPeleado.leAtraen(sims))
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
