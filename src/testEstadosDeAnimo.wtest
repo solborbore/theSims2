@@ -29,7 +29,7 @@ test "Hacer que al sim se le vaya su estado de animo y no varie su felicidad"
 	
 	sim.agregarConocimiento("leer")
 	sim.cambiarAnimo(soniador)
-	sim.eliminarAnimo(soniador)
+	sim.eliminarAnimo()
 	
 	assert.equals(100, sim.nivelFelicidad())
 }
@@ -40,7 +40,8 @@ test "Hacer que al sim se le vaya su estado de animo y mantiene sus conocimiento
 	
 	sim.agregarConocimiento("leer")
 	sim.cambiarAnimo(soniador)
-	sim.eliminarAnimo(soniador)
+	sim.eliminarAnimo()
 	
 	assert.that(sim.conocimientos().contains("leer"))
 }
+

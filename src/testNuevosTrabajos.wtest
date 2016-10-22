@@ -1,0 +1,69 @@
+import Sims.*
+import Trabajos.*
+import fixture.*
+import EstadoDeAnimo.*
+
+test "Un Sim va a un trabajo aburrido hasta la muerte y pierde la felicidad corespondiente a N = 4" {
+	var sim 				= fixture.UnSimInteresadoNormal()
+	var trabajoAM 			= new TrabajoAburridoHastaLaMuerte(100,100)
+	var felicidadAnterior 	= sim.nivelFelicidad()
+	
+	sim.AsignarTrabajo(trabajoAM)
+	sim.trabajar()
+	assert.equals(sim.nivelFelicidad(),felicidadAnterior-(4*100))
+
+}
+
+test "Un Sim va a un trabajo Mercenario Social y gana mucha plata más un peso por cantidad de amigos" {
+	var sim 				= fixture.UnSimInteresadoNormal()
+	var amigo1 				= fixture.UnSimBuenazoNormal()
+	var amigo2 				= fixture.UnSimBuenazoNormal()
+	var trabajoMS 			= new TrabajoMercenarioSocial()
+	
+	sim.hacerAmigo(amigo1)
+	sim.hacerAmigo(amigo2)
+	sim.ganarDinero(100)
+	
+	sim.AsignarTrabajo(trabajoMS)
+	sim.trabajar()
+	assert.equals(sim.dinero(),204)
+
+}
+
+test "Un Sim soñador va a trabajar y vuelve a su estado normal"{
+	var sim 				= fixture.UnSimNormal() 
+	var trabajoM 			= new TrabajoMercenario()
+	
+	sim.cambiarAnimo(soniador)
+	sim.AsignarTrabajo(trabajoM)
+	sim.trabajar()
+	
+	
+	assert.equals(null, sim.estadoDeAnimo())
+	
+	}
+	
+test "Un Sim incomodo va a trabajar y su felicidad vuelve a su estado normal"{
+	var sim 				= fixture.UnSimInteresadoNormal() 
+	var trabajoM 			= new TrabajoMercenario()
+	
+	sim.cambiarAnimo(incomodo)
+	var felicidadAntigua = sim.nivelFelicidad()
+	
+	sim.AsignarTrabajo(trabajoM)
+	sim.trabajar()
+	
+	
+	assert.equals(felicidadAntigua+200, sim.nivelFelicidad())
+	
+	}
+	
+test "Un Sim desempleado intenta trabajar y esto no ocurre por lo tanto su estado de animo no cambia"{
+	var sim 				= fixture.UnSimInteresadoNormal() 
+	sim.cambiarAnimo(incomodo)
+	
+	assert.throwsExceptionWithMessage("Estoy desempleado", {sim.trabajar()})
+	
+	}
+	
+	

@@ -129,10 +129,14 @@ class Sim
 	
 	method trabajar()
 	{
-		if(trabajo != null)
+		if(trabajo != null){
 			trabajo.trabajar(self)
-		else
+			if( estadoDeAnimo != null){
+			self.eliminarAnimo()}
+			}
+		else {
 			error.throwWithMessage("Estoy desempleado")
+	}
 	}
 	
 	method abrazar(sim, abrazo)
@@ -209,19 +213,25 @@ class Sim
  	}
 
 
-	method eliminarAnimo(estado) 
+	method eliminarAnimo() 
  	{
-  		estadoDeAnimo = null
-  		estado.revertirEfecto(self)
+  		estadoDeAnimo.revertirEfecto(self)
+ 		estadoDeAnimo = null
  	}
  	  
- 	method amigosViejos (){
+ 	method amigosViejos ()
+ 	{
    		return  amigos.take(4)
   	}
     
   	method amigosNuevos ()
   	{
    		return  (amigos.reverse()).take(4)
+  	}
+  	
+  	method cantidadAmigos()
+  	{
+  		return amigos.size()
   	}
   	
   	method simMasPopular()
@@ -369,7 +379,11 @@ class SimBuenazo inherits Sim
 			if (amigos.all({amigo=> amigo.trabajo() == self.trabajo()})) {
 				self.variarFelicidad(self.nivelFelicidad() * 0.1) }
 			trabajo.trabajar(self)
+			if( estadoDeAnimo != null){
+			self.eliminarAnimo()
 			}
+			}
+			
 			
 			else 
 		
