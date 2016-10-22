@@ -269,6 +269,11 @@ class Sim
  	 		error.throwWithMessage("esta relacion esta vigente")
  	 	}
  	 }
+ 	 
+ 	method lePrestaPlata(otroSim)
+ 	{
+ 		
+ 	}
 }
 
 
