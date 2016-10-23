@@ -11,8 +11,17 @@ class Relacion
 	
 	constructor(unSim, otroSim)
 	{
-		self.iniciarRelacion(unSim,otroSim)
+		if(self.puedenIniciarRelacion(unSim,otroSim))
+			self.iniciarRelacion(unSim,otroSim)
+		else
+			error.throwWithMessage("No se puede iniciar la relacion, un sim es menor a 16 o ya tiene pareja")
 	}
+	
+	method puedenIniciarRelacion(unSim, otroSim)
+	{
+		return unSim.puedeIniciarRelacion() && otroSim.puedeIniciarRelacion()
+	}
+
 	
 	method circuloDeAmigos() {
 		return circuloDeAmigos

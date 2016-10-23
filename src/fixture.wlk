@@ -97,4 +97,8 @@ object fixture
  		return unSimMasculino.relacion()
 	}
  
+ 	method unSimJoven()
+ 	{
+ 		return new SimInteresado('M',15,100,[],'F')
+ 	}
 }

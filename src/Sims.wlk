@@ -29,6 +29,16 @@ class Sim
 	method valoracion(sim)
 	method leAtrae(sim)
 	
+	method mayorA16anios()
+	{
+		return edad > 16
+	}
+	
+	method puedeIniciarRelacion()
+	{
+		return !self.estaEnPareja() && self.mayorA16anios()
+	}
+	
 	method leAtraen(unosSims) 
 	{
 		return unosSims.filter({unSim => self.leAtrae(unSim)})

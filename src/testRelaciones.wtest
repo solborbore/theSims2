@@ -199,10 +199,28 @@ test "Se intenta reiniciar una relacion que esta vigente"
 {
 	var simHombre = fixture.UnSimBuenazoNormal()
 	var simMujer = fixture.UnSimNormalFemenino()
-	var otroHombre = fixture.UnSimPeleadoNormal()
 	
 	simMujer.iniciarRelacion(simHombre)
 	var rela = simMujer.relacion()
 	
 	assert.throwsExceptionWithMessage("esta relacion esta vigente", { => simMujer.reiniciarRelacion(rela)})
+}
+
+test "Se intenta iniciar una relacion, pero un sim es menor a 16 años"
+{
+	var simJoven = fixture.unSimJoven()
+	var simMujer = fixture.UnSimNormalFemenino()
+	
+	assert.throwsException({ => simMujer.iniciarRelacion(simJoven)})
+}
+
+test "Se intenta iniciar una relacion, pero un sim ya esta en una relacion previa"
+{
+	var simHombre 	= fixture.UnSimBuenazoNormal()
+	var simMujer 	= fixture.UnSimNormalFemenino()
+	var otroHombre 	= fixture.UnSimPeleadoNormal()
+	
+	simMujer.iniciarRelacion(simHombre)
+	
+	assert.throwsException({ => simMujer.iniciarRelacion(otroHombre)})
 }
