@@ -23,6 +23,20 @@ object fixture
 		return new SimBuenazo('M',20,100,[],'F')
 	}
 	
+	method UnSimConSecretos()
+	{
+		var sim 	= self.UnSimNormal()
+		var amigo1 	= self.UnSimNormal()
+		var amigo2 	= self.UnSimNormal()
+
+		sim.agregarConocimiento("conocimientoSecreto")
+
+		sim.hacerAmigo(amigo1)
+		sim.hacerAmigo(amigo2)
+	
+		return sim
+	}
+	
 	method UnSimPeleadoNormal()
 	{
 		return new SimPeleado('M',20,100,[],'F')

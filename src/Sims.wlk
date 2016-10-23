@@ -1,6 +1,7 @@
 import Trabajos.*
 import Celos.*
 import Relaciones.*
+import fixture.*
 
 class Sim
 {
@@ -93,6 +94,53 @@ class Sim
 	method trabajo()
 	{
 		return trabajo 
+	}
+	
+	method loConoce(unConocimiento)
+	{
+		return conocimientos.any({conocimiento => conocimiento == unConocimiento})
+	}
+	
+	method difundirConocimiento(unConocimiento)
+	{
+		if(!self.loConoce(unConocimiento))
+		{
+			self.agregarConocimiento(unConocimiento)
+			self.enseniarAAmigos(unConocimiento)
+		}
+	}
+
+	method conocimientoPrivado(unConocimiento)
+	{
+		return  self.loConoce(unConocimiento) && self.ningunAmigoLoConoce(unConocimiento)
+	}
+	
+	method primerConocimientoPrivado()
+	{
+		if(conocimientos.any({conocimiento => self.conocimientoPrivado(conocimiento)}))
+			return conocimientos.find({conocimiento => self.conocimientoPrivado(conocimiento)})
+		else
+			return null
+	}
+
+	method desparramarChisme(simAfectado)
+	{
+		var unChisme = simAfectado.primerConocimientoPrivado()
+		
+		if(unChisme != null)
+			self.difundirConocimiento(unChisme)
+		else
+			error.throwWithMessage("El sim afectado no tiene secretos")
+	}
+
+	method ningunAmigoLoConoce(unConocimiento)
+	{
+		return amigos.all({amigo => !amigo.loConoce(unConocimiento)})
+	}
+	
+	method enseniarAAmigos(unConocimiento)
+	{
+		amigos.forEach({amigo => amigo.agregarConocimiento(unConocimiento)})
 	}
 	
 	method agregarConocimiento(unConocimiento)

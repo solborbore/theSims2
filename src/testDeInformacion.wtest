@@ -45,3 +45,93 @@ test "Saber si los conocimientos de un Sim se borran"
 	
 	assert.equals(#{},sim.conocimientos())
 }
+
+test "Un sim aprende un conocimiento que sus amigos no saben, y por ende es privado para el"
+{
+	var sim = fixture.UnSimNormal()
+	
+	sim.agregarConocimiento("conocimiento")
+	
+	var amigo1 = fixture.UnSimNormal()
+	var amigo2 = fixture.UnSimNormal()
+	
+	sim.hacerAmigo(amigo1)
+	sim.hacerAmigo(amigo2)
+	
+	assert.that(sim.conocimientoPrivado("conocimiento"))
+}
+
+test "Un sim aprende un conocimiento que alguno de sus amigos sabe, y por ende no es privado para el"
+{
+	var sim = fixture.UnSimNormal()
+	
+	sim.agregarConocimiento("conocimiento")
+	
+	var amigo1 = fixture.UnSimNormal()
+	var amigo2 = fixture.UnSimNormal()
+	
+	amigo1.agregarConocimiento("conocimiento")
+	
+	sim.hacerAmigo(amigo1)
+	sim.hacerAmigo(amigo2)
+	
+	assert.that(!sim.conocimientoPrivado("conocimiento"))
+}
+
+test "un Sim aprende un conocimiento que no sabia, lo difunde y todos sus amigos lo aprenden"
+{
+	var sim = fixture.UnSimNormal()
+	var amigo1 = fixture.UnSimNormal()
+	var amigo2 = fixture.UnSimNormal()
+
+	sim.hacerAmigo(amigo1)
+	sim.hacerAmigo(amigo2)
+	
+	sim.difundirConocimiento("conocimiento")
+	
+	assert.that(amigo1.loConoce("conocimiento") && amigo2.loConoce("conocimiento"))
+}
+
+test "Un sim aprende un conocimiento, pero ya lo sabia y por ende no lo difunde"
+{
+	var sim = fixture.UnSimNormal()
+	var amigo1 = fixture.UnSimNormal()
+	var amigo2 = fixture.UnSimNormal()
+
+	sim.agregarConocimiento("conocimiento")
+
+	sim.hacerAmigo(amigo1)
+	sim.hacerAmigo(amigo2)
+	
+	sim.difundirConocimiento("conocimiento")
+	
+	assert.that(!amigo1.loConoce("conocimiento") && !amigo2.loConoce("Conocimiento"))
+}
+
+
+
+test "Un sim descubre un secreto de otro y lo desparrama"
+{
+	var unSimConSecretos = fixture.UnSimConSecretos()
+	
+	var unSimMalicioso = fixture.UnSimNormal() //o no tanto...
+	
+	var amigo1 = fixture.UnSimNormal()
+	var amigo2 = fixture.UnSimNormal()
+	
+	unSimMalicioso.hacerAmigo(amigo1)
+	unSimMalicioso.hacerAmigo(amigo2)
+	
+	unSimMalicioso.desparramarChisme(unSimConSecretos)
+	
+	assert.that(amigo1.loConoce("conocimientoSecreto") && amigo2.loConoce("conocimientoSecreto"))
+}
+
+test "Un sim intenta descubrir un secreto de otro, pero este no tiene ninguno y por ende no lo puede desparramar"
+{
+	var sim = fixture.UnSimNormal()
+	
+	var unSimMalicioso = fixture.UnSimNormal() //o no tanto...
+
+	assert.throwsException({ => unSimMalicioso.desparramarChisme(sim)})
+}
