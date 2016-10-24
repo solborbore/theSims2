@@ -30,6 +30,11 @@ class Sim
 	method valoracion(sim)
 	method leAtrae(sim)
 	
+	method edad()
+	{
+		return edad
+	}
+	
 	method mayorA16anios()
 	{
 		return edad > 16
@@ -141,6 +146,11 @@ class Sim
 	method enseniarAAmigos(unConocimiento)
 	{
 		amigos.forEach({amigo => amigo.agregarConocimiento(unConocimiento)})
+	}
+	
+	method brindarConocimiento(unSim)
+	{
+		unSim.agregarConocimiento(self.primerConocimientoPrivado())
 	}
 	
 	method agregarConocimiento(unConocimiento)
@@ -354,6 +364,11 @@ class Sim
 	method montoMaximoAPrestarle(otroSim)
  	{
  		return self.valoracion(otroSim) * 10
+ 	}
+ 	
+ 	method cumplirAnios()
+ 	{
+ 		edad += 1
  	}
 
 }

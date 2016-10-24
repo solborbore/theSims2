@@ -1,0 +1,24 @@
+import Sims.*
+import fixture.*
+import Vims.*
+
+test "VimTiene18" 
+{
+	var unVim = fixture.unVimNormal()
+	assert.that(unVim.edad() == 18 )
+}
+
+test "VimNoCumpleAños" 
+{
+	var unVim = fixture.unVimNormal()
+	unVim.cumplirAnios()
+	assert.that(unVim.edad() == 18 )
+}
+
+test "SimCumpleAños" 
+{
+	var unSim = fixture.UnSimNormal()
+	var otroSim = fixture.UnSimNormal()
+	unSim.cumplirAnios()
+	assert.equals(unSim.edad(),(otroSim.edad()+1))
+}

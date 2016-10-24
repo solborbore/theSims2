@@ -1,5 +1,7 @@
 import Sims.*
 import Abrazos.*
+import Vims.*
+import FuentesDeInformacion.*
 
 object fixture 
 {	
@@ -114,5 +116,27 @@ object fixture
  	method unSimJoven()
  	{
  		return new SimInteresado('M',15,100,[],'F')
+ 	}
+ 	
+ 	method unVimNormal()
+ 	{
+ 		return new VimBuenazo('M',20,100,[],'F')
+ 	}
+ 	
+ 	method libro4Cap()
+ 	{
+ 		var librito = new Libro()
+ 		librito.agregarCapitulo("Las manzanas son rojas")
+ 		librito.agregarCapitulo("Las frutillas son rojas")
+ 		librito.agregarCapitulo("Las peras son verdes")
+ 		librito.agregarCapitulo("Las bananas son amarillas")
+ 		return librito
+ 	}
+ 	
+ 	method libro1Cap()
+ 	{
+ 		var librito = new Libro()
+ 		librito.agregarCapitulo("Bob Patinio tiene pies grandes")
+ 		return librito
  	}
 }
