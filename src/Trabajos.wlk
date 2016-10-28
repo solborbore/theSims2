@@ -50,3 +50,4 @@ class TrabajoMercenarioSocial inherits TrabajoMercenario
 		sim.ganarDinero(sim.cantidadAmigos())
 	}
 } 
+object desocupado{}

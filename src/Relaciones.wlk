@@ -56,8 +56,8 @@ class Relacion
 	
 	method terminarRelacion()
 	{	
-  		miembro1.relacion(null)
-  		miembro2.relacion(null)
+  		miembro1.relacion(soltero)
+  		miembro2.relacion(soltero)
 		vigente = false
 	}
 	
@@ -110,3 +110,4 @@ class Relacion
   		return [miembro1,miembro2]
  	}
 }
+object soltero{}

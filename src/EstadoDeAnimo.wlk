@@ -25,3 +25,6 @@ object incomodo
  		sim.variarFelicidad(200)
  	}
 }
+
+object neutral{}
+	

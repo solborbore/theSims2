@@ -2,6 +2,7 @@ import Trabajos.*
 import Celos.*
 import Relaciones.*
 import fixture.*
+import EstadoDeAnimo.*
 
 class Sim
 {
@@ -11,9 +12,9 @@ class Sim
 	var amigos 			= []
 	var dinero			= 0
 	var conocimientos 	= #{}
-	var trabajo			= null
-	var estadoDeAnimo
-	var relacion		= null
+	var trabajo			= desocupado
+	var estadoDeAnimo	= neutral
+	var relacion		= soltero
 	var sexoPreferencia
 	//En Cuanto a la correccion "Con respecto a los conocimientos, falta la lógica que se encarga de que un sim no tenga conocimientos repetidos" habiamos implementado el uso de sets que justamente evita la repeticion. A eso te referias?
 	var conocimientosPerdidos = #{}
@@ -197,9 +198,9 @@ class Sim
 	
 	method trabajar()
 	{
-		if(trabajo != null){
+		if(trabajo != desocupado){
 			trabajo.trabajar(self)
-			if( estadoDeAnimo != null){
+			if( estadoDeAnimo != neutral){
 			self.eliminarAnimo()}
 			}
 		else {
@@ -284,7 +285,7 @@ class Sim
 	method eliminarAnimo() 
  	{
   		estadoDeAnimo.revertirEfecto(self)
- 		estadoDeAnimo = null
+ 		estadoDeAnimo = neutral
  	}
  	  
  	method amigosViejos ()
@@ -452,7 +453,7 @@ class SimBuenazo inherits Sim
 			if (amigos.all({amigo=> amigo.trabajo() == self.trabajo()})) {
 				self.variarFelicidad(self.nivelFelicidad() * 0.1) }
 			trabajo.trabajar(self)
-			if( estadoDeAnimo != null){
+			if( estadoDeAnimo != neutral){
 			self.eliminarAnimo()
 			}
 			}
