@@ -325,7 +325,7 @@ class Sim
  	
  	method estaEnPareja()
  	{
- 		return (relacion != null)
+ 		return (relacion != soltero)
  	}
  	
  	method relacion()

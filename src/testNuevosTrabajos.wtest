@@ -39,7 +39,7 @@ test "Un Sim soñador va a trabajar y vuelve a su estado normal"{
 	sim.trabajar()
 	
 	
-	assert.equals(null, sim.estadoDeAnimo())
+	assert.equals(neutral, sim.estadoDeAnimo())
 	
 	}
 	

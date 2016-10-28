@@ -1,4 +1,5 @@
 import Sims.*
+import Relaciones.*
 import fixture.*
 
 object helper
@@ -63,7 +64,7 @@ test "Saber Si Un Sim Forma Parte De Una Relacion"
 	
 	simHombre.iniciarRelacion(simMujer)
 	
-	assert.notEquals(null, simHombre.relacion())
+	assert.notEquals(soltero, simHombre.relacion())
 }
 
 test "Saber si una relacion termino"
@@ -74,7 +75,7 @@ test "Saber si una relacion termino"
 	simHombre.iniciarRelacion(simMujer)
 	simHombre.terminarRelacion()
 	
-	assert.equals(null, simHombre.relacion())
+	assert.equals(soltero, simHombre.relacion())
 }
 
 test "El segundo sim pertenece a la pareja del primero"
@@ -176,7 +177,7 @@ test "Se reinicia una relacion, se pierde la relacion nueva con el amante y se v
 	simMujer.iniciarRelacion(otroHombre)
 	simMujer.reiniciarRelacion(rela)
 	
-	assert.that(simMujer.relacion().miembros() == [simMujer, simHombre] && otroHombre.relacion() == null)
+	assert.that(simMujer.relacion().miembros() == [simMujer, simHombre] && otroHombre.relacion() == soltero)
 }
 
 test "Se intenta reiniciar una relacion de la que el sim no forma parte, y da error"
@@ -186,13 +187,12 @@ test "Se intenta reiniciar una relacion de la que el sim no forma parte, y da er
 	var otroHombre = fixture.UnSimPeleadoNormal()
 	
 	simMujer.iniciarRelacion(simHombre)
-	var rela = simMujer.relacion()
 	simMujer.terminarRelacion()
 	simMujer.iniciarRelacion(otroHombre)
 	
 	var relacion = fixture.unaRelacion()
 	
-	assert.throwsExceptionWithMessage("esta relacion no pertenece a este sim", { => simMujer.reiniciarRelacion(relacion)})
+	assert.throwsExceptionWithMessage("esta relacion no pertenece a este sim", {simMujer.reiniciarRelacion(relacion)})
 }
 
 test "Se intenta reiniciar una relacion que esta vigente"
@@ -203,7 +203,7 @@ test "Se intenta reiniciar una relacion que esta vigente"
 	simMujer.iniciarRelacion(simHombre)
 	var rela = simMujer.relacion()
 	
-	assert.throwsExceptionWithMessage("esta relacion esta vigente", { => simMujer.reiniciarRelacion(rela)})
+	assert.throwsExceptionWithMessage("esta relacion esta vigente", {simMujer.reiniciarRelacion(rela)})
 }
 
 test "Se intenta iniciar una relacion, pero un sim es menor a 16 años"
@@ -211,7 +211,7 @@ test "Se intenta iniciar una relacion, pero un sim es menor a 16 años"
 	var simJoven = fixture.unSimJoven()
 	var simMujer = fixture.UnSimNormalFemenino()
 	
-	assert.throwsException({ => simMujer.iniciarRelacion(simJoven)})
+	assert.throwsException({simMujer.iniciarRelacion(simJoven)})
 }
 
 test "Se intenta iniciar una relacion, pero un sim ya esta en una relacion previa"
@@ -222,5 +222,5 @@ test "Se intenta iniciar una relacion, pero un sim ya esta en una relacion previ
 	
 	simMujer.iniciarRelacion(simHombre)
 	
-	assert.throwsException({ => simMujer.iniciarRelacion(otroHombre)})
+	assert.throwsException({simMujer.iniciarRelacion(otroHombre)})
 }
