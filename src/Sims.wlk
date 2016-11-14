@@ -16,8 +16,7 @@ class Sim
 	var estadoDeAnimo	= neutral
 	var relacion		= soltero
 	var sexoPreferencia
-	//En Cuanto a la correccion "Con respecto a los conocimientos, falta la lógica que se encarga de que un sim no tenga conocimientos repetidos" habiamos implementado el uso de sets que justamente evita la repeticion. A eso te referias?
-	var conocimientosPerdidos = #{}
+	var fuentesDeInformacion = #{}
 	
 	constructor(sex,ed,nFelicidad,amigs, sexPreferencia)
 	{
@@ -130,13 +129,16 @@ class Sim
 		else
 			return null
 	}
+	
+	method unChisme()
+	{
+		return self.primerConocimientoPrivado()
+	}
 
 	method desparramarChisme(simAfectado)
 	{
-		var unChisme = simAfectado.primerConocimientoPrivado()
-		
-		if(unChisme != null)
-			self.difundirConocimiento(unChisme)
+		if(simAfectado.unChisme() != null)
+			self.difundirConocimiento(simAfectado.unChisme())
 		else
 			error.throwWithMessage("El sim afectado no tiene secretos")
 	}
@@ -269,18 +271,6 @@ class Sim
  		celos.ponerCeloso(self)
  	}
 
-	method agregarConocimientosPerdidos()
- 	{	
-  		conocimientos = conocimientosPerdidos
- 	}	
- 
- 
- 	method eliminarConocimientos() 
- 	{ 
-  		conocimientos.forEach({conoc => conocimientosPerdidos.add(conoc)})
-  	 	conocimientos.clear()
- 	}
-
 
 	method eliminarAnimo() 
  	{
@@ -369,6 +359,22 @@ class Sim
  	method cumplirAnios()
  	{
  		edad += 1
+ 	}
+ 	
+ 	method amigoAlAzar()
+ 	{
+ 		return amigos.anyOne()
+ 	}
+ 	
+ 	method brindarInformacion(unSim)
+ 	{
+ 		unSim.agregarConocimiento(self.amigoAlAzar().unChisme())
+ 	}
+ 	
+ 	method agregarFuenteDeInformacion(fuente)
+ 	{
+ 		fuentesDeInformacion.add(fuente)
+ 		fuente.brindarInformacion(self)
  	}
 
 }
