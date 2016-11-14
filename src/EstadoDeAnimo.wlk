@@ -1,30 +1,24 @@
 object soniador 
 {
- 	method efectoEstadoDeAnimo(sim)
+  	method felicidad()
  	{
-  		sim.variarFelicidad(1000)
-  		sim.eliminarConocimientos()
- 	}
- 	
- 	method revertirEfecto(sim)
- 	{
- 		sim.variarFelicidad(-1000)
- 		sim.agregarConocimientosPerdidos()
+ 		return 1000
  	}
 }
 
 object incomodo 
 {
- 	method efectoEstadoDeAnimo(sim)
+	method felicidad()
  	{
- 	 	sim.variarFelicidad(-200)
- 	}
- 	
- 	method revertirEfecto(sim)
- 	{
- 		sim.variarFelicidad(200)
+ 		return -200
  	}
 }
 
-object neutral{}
+object neutral{
+	
+	method felicidad()
+ 	{
+ 		return 0
+ 	}
+}
 	

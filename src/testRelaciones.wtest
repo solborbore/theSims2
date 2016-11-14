@@ -34,7 +34,7 @@ test "Dos sims inician una relacion y se crea un circulo de amigos con los amigo
 	
 	var relacion 		= helper.iniciarRelacion(unSimMasculino,unSimFemenino)
 	
-	assert.equals(#{otroAmigo, unAmigo},relacion.circuloDeAmigos())
+	assert.equals(#{otroAmigo, unAmigo}, relacion.circuloDeAmigos())
 }
 
 test "Dos sims inician una relacion, se atraen y por ende funciona"

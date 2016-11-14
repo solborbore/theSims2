@@ -6,7 +6,6 @@ class Relacion
 {
 	var miembro1
 	var miembro2
-	var circuloDeAmigos = #{}
 	var vigente = false
 	
 	constructor(unSim, otroSim)
@@ -24,7 +23,7 @@ class Relacion
 
 	
 	method circuloDeAmigos() {
-		return circuloDeAmigos
+		return #{miembro1.amigos(),miembro2.amigos()}.flatten()
 	}
 	
 	method vigente()
@@ -36,10 +35,7 @@ class Relacion
 	{
 		miembro1 = unSim
 		miembro2 = otroSim
-		
-		circuloDeAmigos.addAll(unSim.amigos())
-		circuloDeAmigos.addAll(otroSim.amigos())
-		
+				
 		self.vincularSims()
 		
 		vigente = true
@@ -90,7 +86,7 @@ class Relacion
 	
 	method aUnoLeGustaElAmigo(unSim)
 	{
-		return circuloDeAmigos.any({amigo => unSim.leAtrae(amigo)})
+		return self.circuloDeAmigos().any({amigo => unSim.leAtrae(amigo)})
 	}
 	
 	method parejaDe(miembro)

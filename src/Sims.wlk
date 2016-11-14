@@ -63,7 +63,7 @@ class Sim
 	
 	method nivelFelicidad()
 	{
-		return nivelFelicidad
+		return nivelFelicidad + estadoDeAnimo.felicidad()
 	}
 	
 	method dinero()
@@ -88,7 +88,9 @@ class Sim
 	
 	method conocimientos()
 	{
-		return conocimientos
+		if (estadoDeAnimo == soniador) {return #{} } else {
+			return conocimientos
+		}
 	}
 	
 	method nivelFelicidad(felicidadNueva)
@@ -187,7 +189,6 @@ class Sim
 	method cambiarAnimo(estado)
 	{
 		estadoDeAnimo= estado
-		estado.efectoEstadoDeAnimo(self)
 	}
 	
 	method hacerAmigo(nuevoAmigo)
@@ -200,9 +201,8 @@ class Sim
 	{
 		if(trabajo != desocupado){
 			trabajo.trabajar(self)
-			if( estadoDeAnimo != neutral){
-			self.eliminarAnimo()}
-			}
+			estadoDeAnimo = neutral}
+			
 		else {
 			error.throwWithMessage("Estoy desempleado")
 	}
@@ -284,7 +284,6 @@ class Sim
 
 	method eliminarAnimo() 
  	{
-  		estadoDeAnimo.revertirEfecto(self)
  		estadoDeAnimo = neutral
  	}
  	  
