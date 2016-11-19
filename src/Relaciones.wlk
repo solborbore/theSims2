@@ -91,14 +91,7 @@ class Relacion
 	
 	method parejaDe(miembro)
 	{
-		if (miembro1 == miembro) 
-		{
-			return miembro2
-			
-		} else {
-			
-			return miembro1
-		}
+		return miembro.pareja()
 	}
 	
 	 method miembros()

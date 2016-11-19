@@ -17,6 +17,7 @@ class Sim
 	var relacion		= soltero
 	var sexoPreferencia
 	var fuentesDeInformacion = #{}
+	var pareja
 	
 	constructor(sex,ed,nFelicidad,amigs, sexPreferencia)
 	{
@@ -25,6 +26,10 @@ class Sim
 		nivelFelicidad 	= nFelicidad
 		amigos 			= amigs
 		sexoPreferencia = sexPreferencia
+	}
+	
+	method pareja (){
+		return pareja
 	}
 	
 	method valoracion(sim)
@@ -299,7 +304,9 @@ class Sim
  	
  	method iniciarRelacion(otroSim)
  	{
+ 		pareja = otroSim
  		return new Relacion(self, otroSim)
+ 		
  	}
  	
  	method relacion(rela)
@@ -310,6 +317,7 @@ class Sim
   	method terminarRelacion()
   	{
    		relacion.terminarRelacion()
+   		pareja = soltero
 	}
  	
  	method estaEnPareja()
