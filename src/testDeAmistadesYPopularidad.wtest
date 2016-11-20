@@ -6,12 +6,9 @@ object helper{
 	
 	method hizoUnAmigoYLaFelicidadAumento(sim, otroSim)
 	{
-		var felicidadSim 		    = sim.nivelFelicidad()
-		var valoracionSim			= otroSim.valoracion(sim)
-		
 		sim.hacerAmigo(otroSim)
 		
-		return (sim.nivelFelicidad() == felicidadSim + valoracionSim)
+		return (sim.nivelFelicidad() == sim.nivelFelicidad() + otroSim.valoracion(sim))
 	}
 	
 	method hizoUnAmigoYFormaParteDeSuListaDeAmigos(sim, otroSim)

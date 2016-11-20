@@ -34,10 +34,10 @@ class Sim
 		amigos 			= amigs
 		sexoPreferencia = sexPreferencia
 		esVim			= vim
-		if (esVim){
-			edad = 18
-		} else{
+		if (!esVim){
 			edad = ed
+		} else{
+			edad = 18
 		}
 		
 	}

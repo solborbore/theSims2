@@ -1,6 +1,5 @@
 import Sims.*
 import Abrazos.*
-import Vims.*
 import FuentesDeInformacion.*
 
 object fixture 
@@ -12,17 +11,17 @@ object fixture
 	
 	method UnSimInteresadoNormal()
 	{
-		return new SimInteresado('M',20,100,[],'F')
+		return new SimInteresado('M',20,100,[],'F',false)
 	}
 	
 	method UnSimSuperficialNormal()
 	{
-		return new SimSuperficial('M',20,100,[],'F')
+		return new SimSuperficial('M',20,100,[],'F',false)
 	}
 	
 	method UnSimBuenazoNormal()
 	{
-		return new SimBuenazo('M',20,100,[],'F')
+		return new SimBuenazo('M',20,100,[],'F',false)
 	}
 	
 	method UnSimConSecretos()
@@ -41,7 +40,7 @@ object fixture
 	
 	method UnSimPeleadoNormal()
 	{
-		return new SimPeleado('M',20,100,[],'F')
+		return new SimPeleado('M',20,100,[],'F',false)
 	}
 	
 	method unAbrazoComun()
@@ -56,51 +55,51 @@ object fixture
 	
 	method UnSimNormalFemenino()
  	{
- 		return new SimInteresado('F',18,100,[],'M')
+ 		return new SimInteresado('F',18,100,[],'M',false)
 	}
 	
 	method UnSimSuperficialFemenino()
 	{
-		return new SimSuperficial('F',18,100,[],'M')
+		return new SimSuperficial('F',18,100,[],'M',false)
 	}
 	
 	method UnSimBuenazoFemenino()
 	{
-		return new SimBuenazo('F',18,100,[],'M')
+		return new SimBuenazo('F',18,100,[],'M',false)
 	}
 	
 	method UnSimPeleadoFemenino()
 	{
-		return new SimPeleado('F',18,100,[],'M')
+		return new SimPeleado('F',18,100,[],'M',false)
 	}
 	
 	method UnSimRico()
 	{
-		var sim  = new SimBuenazo('M',20,100,[],'F')
+		var sim  = new SimBuenazo('M',20,100,[],'F',false)
 		sim.ganarDinero(1000000)
 		return sim
 	}
 	
 	method UnSimPobre() 
 	{
-		var sim  = new SimBuenazo('M',20,100,[],'F')
+		var sim  = new SimBuenazo('M',20,100,[],'F',false)
 		sim.ganarDinero(1)
 		return sim
 	}
 	
 	method UnSimTriste() 
 	{
-		return new SimBuenazo('M',20,1,[],'F')
+		return new SimBuenazo('M',20,1,[],'F',false)
 	}
 	
 	method UnSimTristeFemenino() 
 	{
-		return new SimBuenazo('F',18,1,[],'M')
+		return new SimBuenazo('F',18,1,[],'M',false)
 	}
 	
 	method UnSimFeliz()
 	{
-		return new SimBuenazo('M',20,300,[],'F')
+		return new SimBuenazo('M',20,300,[],'F',false)
 	}
 	
 	method unaRelacion()
@@ -115,12 +114,12 @@ object fixture
  
  	method unSimJoven()
  	{
- 		return new SimInteresado('M',15,100,[],'F')
+ 		return new SimInteresado('M',15,100,[],'F',false)
  	}
  	
  	method unVimNormal()
  	{
- 		return new VimBuenazo('M',20,100,[],'F')
+ 		return new SimBuenazo('M',20,100,[],'F',true)
  	}
  	
  	method libro4Cap()

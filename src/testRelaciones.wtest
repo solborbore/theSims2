@@ -110,6 +110,7 @@ test "Se pudre todo cuando uno de los miembros es interesado y le atrae un amigo
 	simMujer.ganarDinero(100)
 	tercero.ganarDinero(200)
 	simMujer.hacerAmigo(tercero)
+	otraMujer.hacerAmigo(tercero)
 		
 	otraMujer.iniciarRelacion(simMujer)
 	
@@ -146,6 +147,7 @@ test "Se pudre todo cuando uno de los miembros es buenazo y le atrae un amigo de
 	var tercero = fixture.UnSimBuenazoFemenino()
 	
 	simHombre.hacerAmigo(tercero)
+	otroHombre.hacerAmigo(tercero)
 	
 	simHombre.iniciarRelacion(otroHombre)
 	
@@ -159,6 +161,7 @@ test "Se pudre todo cuando uno de los miembros esta peleado con la vida y le atr
 	var tercero = fixture.UnSimTristeFemenino()
 	
 	simHombre.hacerAmigo(tercero)
+	otroHombre.hacerAmigo(tercero)
 	
 	simHombre.iniciarRelacion(otroHombre)
 	
