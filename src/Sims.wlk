@@ -18,14 +18,28 @@ class Sim
 	var sexoPreferencia
 	var fuentesDeInformacion = #{}
 	var pareja
+	var esVim 
 	
-	constructor(sex,ed,nFelicidad,amigs, sexPreferencia)
+	/* Creamos el atributo esVim para asi poder instanciar por el constructor si es un sim o un vim.
+	 * En el caso de que lo sea, el metodo cumplir años va a actuar diferente. De esta manera se
+	 * evita la repeticion de logica que se generaria en el caso de hacer una clase vim para cada
+	 * tipo de sim que existe. En el caso de modificar la version y necesitar que los sims se puedan
+	 * convertir en vims y viceversa, crearimos un metodo morder que cambie el valor del 
+	 * atributo esVim */
+	
+	constructor(sex,ed,nFelicidad,amigs, sexPreferencia,vim)
 	{
 		sexo 			= sex
-		edad 			= ed
 		nivelFelicidad 	= nFelicidad
 		amigos 			= amigs
 		sexoPreferencia = sexPreferencia
+		esVim			= vim
+		if (esVim){
+			edad = 18
+		} else{
+			edad = ed
+		}
+		
 	}
 	
 	method pareja (){
@@ -366,6 +380,10 @@ class Sim
  	
  	method cumplirAnios()
  	{
+ 		if (esVim)
+ 		{
+ 			error.throwWithMessage("Los vims no pueden cumplir anios")
+ 		}
  		edad += 1
  	}
  	
@@ -389,7 +407,7 @@ class Sim
 
 class SimInteresado inherits Sim
 {
-		constructor(sex,ed,nFelicidad,amigs,sexPreferencia) = super(sex,ed,nFelicidad,amigs,sexPreferencia)
+		constructor(sex,ed,nFelicidad,amigs,sexPreferencia,vim) = super(sex,ed,nFelicidad,amigs,sexPreferencia,vim)
 	
 	override method valoracion(sim) 
 	{
@@ -422,7 +440,7 @@ class SimInteresado inherits Sim
 
 class SimSuperficial inherits Sim
 {
-		constructor(sex,ed,nFelicidad,amigs,sexPreferencia) = super(sex,ed,nFelicidad,amigs,sexPreferencia)
+		constructor(sex,ed,nFelicidad,amigs,sexPreferencia,vim) = super(sex,ed,nFelicidad,amigs,sexPreferencia,vim)
 	
 	override method valoracion(sim)
 	{
@@ -442,7 +460,7 @@ class SimSuperficial inherits Sim
 
 class SimBuenazo inherits Sim
 {
-		constructor(sex,ed,nFelicidad,amigs,sexPreferencia) = super(sex,ed,nFelicidad,amigs,sexPreferencia)
+		constructor(sex,ed,nFelicidad,amigs,sexPreferencia,vim) = super(sex,ed,nFelicidad,amigs,sexPreferencia,vim)
 	
 	override method simMasValorado()
 	{
@@ -483,7 +501,7 @@ class SimBuenazo inherits Sim
 
 class SimPeleado inherits Sim
 {
-		constructor(sex,ed,nFelicidad,amigs,sexPreferencia) = super(sex,ed,nFelicidad,amigs,sexPreferencia)
+		constructor(sex,ed,nFelicidad,amigs,sexPreferencia,vim) = super(sex,ed,nFelicidad,amigs,sexPreferencia,vim)
 	
 	override method simMasValorado()
 	{
