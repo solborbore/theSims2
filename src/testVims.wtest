@@ -1,6 +1,5 @@
 import Sims.*
 import fixture.*
-import Vims.*
 
 test "VimTiene18" 
 {
@@ -11,8 +10,7 @@ test "VimTiene18"
 test "VimNoCumpleAños" 
 {
 	var unVim = fixture.unVimNormal()
-	unVim.cumplirAnios()
-	assert.that(unVim.edad() == 18 )
+	assert.throwsExceptionWithMessage("Los vims no pueden cumplir anios", {unVim.cumplirAnios()})
 }
 
 test "SimCumpleAños" 
